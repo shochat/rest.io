@@ -23,4 +23,16 @@ public class PasswordController {
 
         return passwordGenerator.generatePassword(numberOfCharacters, withUppercase, withNumbers, withSymbols);
     }
+
+    @GetMapping("/forValue")
+    public String generateForValue(
+            @RequestParam(name = "value") String value,
+            @RequestParam(name = "key") String key,
+            @RequestParam(name = "count", required = false, defaultValue = "10") int numberOfCharacters,
+            @RequestParam(name = "u", required = false, defaultValue = "false") boolean withUppercase,
+            @RequestParam(name = "n", required = false, defaultValue = "false") boolean withNumbers,
+            @RequestParam(name = "s", required = false, defaultValue = "false") boolean withSymbols) {
+
+        return passwordGenerator.generateForValue(value, key, numberOfCharacters, withUppercase, withNumbers, withSymbols);
+    }
 }
