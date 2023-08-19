@@ -10,7 +10,10 @@ import java.security.MessageDigest;
 
 @Component
 public class NaivePasswordGenerator implements PasswordGenerator {
-    final private char[] symbols = "!@#$%^&*(){}[]<>.|\\:;?/,".toCharArray();
+    final private static String symbols = "!@#$%^&*(){}[]<>.|\\:;?/,";
+    final private static String lowerCase = "abcdefghijklmnopqrstuvwxyz";
+    final private static String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    final private static String numbers = "0123456789";
 
     @Override
     public String generatePassword(int length, boolean withUpperCase, boolean withNumbers, boolean withSymbols) {
@@ -40,21 +43,21 @@ public class NaivePasswordGenerator implements PasswordGenerator {
                 charArray[i] = Character.toUpperCase(charArray[i]);
             }
             if (withSymbols && Character.isDigit(charArray[i]) && i % 3 == 0) {
-                charArray[i] = symbols[symbolsIndex];
-                symbolsIndex = ++symbolsIndex % symbols.length;
+                charArray[i] = symbols.toCharArray()[symbolsIndex];
+                symbolsIndex = ++symbolsIndex % symbols.length();
             }
         }
         return String.valueOf(charArray);
     }
 
     private static String getAllowedChars(boolean withUpperCase, boolean withNumbers, boolean withSymbols) {
-        String total = withUpperCase ? "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" :
-                "abcdefghijklmnopqrstuvwxyz";
+        
+        String total = withUpperCase ? lowerCase + upperCase : lowerCase;
         if (withNumbers) {
-            total += "0123456789";
+            total += numbers;
         }
         if (withSymbols) {
-            total += "!@#$%^&*()_+-=`~/?'|\\'.,<>[]{}";
+            total += symbols;
         }
         return total;
     }

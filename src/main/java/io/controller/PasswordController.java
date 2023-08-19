@@ -2,6 +2,7 @@ package io.controller;
 
 import io.logic.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,11 +29,13 @@ public class PasswordController {
     public String generateForValue(
             @RequestParam(name = "value") String value,
             @RequestParam(name = "key") String key,
-            @RequestParam(name = "count", required = false, defaultValue = "10") int numberOfCharacters,
+            @RequestParam(name = "length", required = false, defaultValue = "10") int length,
             @RequestParam(name = "u", required = false, defaultValue = "false") boolean withUppercase,
             @RequestParam(name = "n", required = false, defaultValue = "false") boolean withNumbers,
             @RequestParam(name = "s", required = false, defaultValue = "false") boolean withSymbols) {
 
-        return passwordGenerator.generateForValue(value, key, numberOfCharacters, withUppercase, withNumbers, withSymbols);
+        return passwordGenerator.generateForValue(value, key, length, withUppercase, withNumbers, withSymbols);
     }
+
+
 }
