@@ -2,7 +2,7 @@ const lengthRange = document.getElementById("passwordLengthRange");
 const lengthNumber = document.getElementById("passwordLengthNumber");
 const form = document.getElementById("passwordGeneratorForm");
 
-const passwordLength = lengthNumber.value
+
 
 const passwordElement = document.getElementById("passwordDisplay")
 const valueElement = document.getElementById("value");
@@ -17,24 +17,28 @@ form.addEventListener('submit', e => {
     e.preventDefault();
     const value = valueElement.value;
     const key = keyElement.value;
+    const passwordLength = lengthNumber.value
     const includeUppercase = includeUppercaseElement.checked
     const includeSymbols = includeSymbolsElement.checked
     passwordElement.innerText = generatePassword(value, key, passwordLength, includeUppercase, includeSymbols);
 })
 
-function generatePassword(value, key, passwordLength, includeUppercase, includeSymbols) {
-    const xhr = new XMLHttpRequest();
+async function generatePassword(value, key, passwordLength, includeUppercase, includeSymbols) {
     const urlTemplate = "http://localhost:8080/password/forValue?"
         + "value=" + value
         + "&key=" + key
         + "&length=" + passwordLength
         + "&u=" + includeUppercase
         + "&s=" + includeSymbols
-    xhr.open("GET", urlTemplate);
-    xhr.send();
 
-    console.log(xhr.responseText)
-    return xhr.responseText;
+    const response = await fetch(urlTemplate, {
+        method: "GET",
+        headers: {
+            "Content-Type": "text/html"
+        }
+    });
+
+    return response.text().then()
 }
 
 function syncAmount(event) {
