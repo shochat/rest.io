@@ -20,7 +20,8 @@ form.addEventListener('submit', e => {
     const passwordLength = lengthNumber.value
     const includeUppercase = includeUppercaseElement.checked
     const includeSymbols = includeSymbolsElement.checked
-    passwordElement.innerText = generatePassword(value, key, passwordLength, includeUppercase, includeSymbols);
+    const passwordPromise = generatePassword(value, key, passwordLength, includeUppercase, includeSymbols);
+    passwordPromise.then(text => passwordElement.innerText = text)
 })
 
 async function generatePassword(value, key, passwordLength, includeUppercase, includeSymbols) {
@@ -38,7 +39,7 @@ async function generatePassword(value, key, passwordLength, includeUppercase, in
         }
     });
 
-    return response.text().then()
+    return response.text();
 }
 
 function syncAmount(event) {
