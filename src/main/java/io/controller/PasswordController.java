@@ -28,13 +28,12 @@ public class PasswordController {
     @GetMapping("/forValue")
     public String generateForValue(
             @RequestParam(name = "value") String value,
-            @RequestParam(name = "key") String key,
             @RequestParam(name = "length", required = false, defaultValue = "10") int length,
             @RequestParam(name = "u", required = false, defaultValue = "false") boolean withUppercase,
             @RequestParam(name = "n", required = false, defaultValue = "false") boolean withNumbers,
             @RequestParam(name = "s", required = false, defaultValue = "false") boolean withSymbols) {
 
-        return passwordGenerator.generateForValue(value, key, length, withUppercase, withNumbers, withSymbols);
+        return passwordGenerator.generateForValue(value, length, withUppercase, withNumbers, withSymbols);
     }
 
 

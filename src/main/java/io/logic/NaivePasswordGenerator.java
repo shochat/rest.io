@@ -23,16 +23,16 @@ public class NaivePasswordGenerator implements PasswordGenerator {
 
     @Override
     @SneakyThrows
-    public String generateForValue(String value, String key, int count, boolean withUppercase, boolean withNumbers, boolean withSymbols) {
+    public String generateForValue(String value, int count, boolean withUppercase, boolean withNumbers, boolean withSymbols) {
         final MessageDigest sha3 = MessageDigest.getInstance("SHA3-256");
-        byte[] bytes = sha3.digest(String.format("%s$%s", value, key).getBytes(StandardCharsets.UTF_8));
+        byte[] bytes = sha3.digest(value.getBytes(StandardCharsets.UTF_8));
 
         String hashString = new BigInteger(bytes).toString(36);
 
         if ( ! withUppercase && ! withSymbols) {
-            return hashString;
+            return hashString.substring(0, count);
         }
-        return insertUpperCaseAndSymbols(hashString, withUppercase, withSymbols);
+        return insertUpperCaseAndSymbols(hashString, withUppercase, withSymbols).substring(0, count);
     }
 
     private String insertUpperCaseAndSymbols(String hashString,boolean withUppercase, boolean withSymbols) {
