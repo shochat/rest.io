@@ -23,7 +23,7 @@ form.addEventListener('submit', e => {
 })
 
 async function generatePassword(value, passwordLength, includeUppercase, includeSymbols) {
-    const urlTemplate = "http://localhost:8080/password/forValue?"
+    const urlTemplate = "https://localhost:8443/password/forValue?"
         + "value=" + value
         + "&length=" + passwordLength
         + "&u=" + includeUppercase

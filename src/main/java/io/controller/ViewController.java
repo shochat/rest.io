@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ViewController {
     @GetMapping("/form")
     public String test() {
-        return "password";
+        return "password.html";
     }
 }
