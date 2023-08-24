@@ -58,6 +58,7 @@ label {
     align-items: center;
     word-break: break-all;
     border-radius: .5rem;
+    cursor: pointer;
 }
 
 .btn {
@@ -73,4 +74,9 @@ label {
 
 .btn:hover {
     background-color: #FFFFFF33;
+}
+
+.password-display:hover {
+    background-color: #FFFFFF33;
+    color: white;
 }

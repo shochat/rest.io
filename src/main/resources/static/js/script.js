@@ -39,3 +39,14 @@ function syncAmount(event) {
     lengthRange.value = value;
     lengthNumber.value = value;
 }
+
+function copyToClickBoard(){
+    var content = document.getElementById("passwordDisplay").innerHTML;
+    navigator.clipboard.writeText(content)
+        .then(() => {
+            console.log("Text has been copied!")
+        })
+        .catch(err => {
+            console.log("Something is not right, Oops!");
+        })
+}
