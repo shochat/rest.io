@@ -44,6 +44,7 @@ function copyToClickBoard(){
     var content = document.getElementById("passwordDisplay").innerHTML;
     navigator.clipboard.writeText(content)
         .then(() => {
+            alert("Password copied to clipboard")
             console.log("Text has been copied!")
         })
         .catch(err => {
