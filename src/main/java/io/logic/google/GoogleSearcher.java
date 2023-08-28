@@ -1,6 +1,7 @@
 package io.logic.google;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -9,9 +10,16 @@ import org.springframework.web.client.RestTemplate;
 public class GoogleSearcher {
     @Autowired
     private RestTemplate client;
+    @Value("${google.search.engine.id}")
+    private String googleSearchEnginId;
+
+    @Value("${google.search.api.key}")
+    private String googleSearchApiKey;
+    @Value("${google.search.api.base.url}")
+    private String googleSearchApiBaseUrl;
     public String searchByQuery(String query) {
-        ResponseEntity<String> response = client.getForEntity("https://www.googleapis.com/customsearch/v1?key=AIzaSyA9kyfTrlb_PKYxGxRQoXW9NH6Wiy5eeIE&q=what%20are%20the%20uses%20of%20renewable%20energy&cx=d59111001aa984af3&start=11", String.class);
-        String body =  response.getBody();
-        return body;
+        String url = String.format("%s?key=%s&cx=%s&q=%s&start=11", googleSearchApiBaseUrl, googleSearchApiKey, googleSearchEnginId, query);
+        ResponseEntity<String> response = client.getForEntity(url, String.class);
+        return response.getBody();
     }
 }

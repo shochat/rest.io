@@ -1,4 +1,4 @@
-package io.logic;
+package io.logic.password;
 
 public interface PasswordGenerator {
     String generatePassword(int length, boolean withUpperCase, boolean withNumbers, boolean withSymbols);
