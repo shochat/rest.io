@@ -1,7 +1,7 @@
 package io.controller;
 
 import io.logic.google.Searcher;
-import io.model.CustomSearchResults;
+import io.model.search.CustomSearchResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

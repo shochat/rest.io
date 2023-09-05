@@ -1,4 +1,4 @@
-package io.model;
+package io.model.search;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package io.logic.google;
 
-import io.model.CustomSearchResults;
+import io.model.search.CustomSearchResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package io.model;
+package io.model.search;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
