@@ -8,8 +8,12 @@ import java.util.stream.Collectors;
 import io.config.security.JwtUtils;
 import io.config.security.UserDetailsImpl;
 import io.model.message.ERole;
+import io.model.message.MessageResponse;
 import io.model.message.Role;
 import io.model.message.User;
+import io.model.user.LoginRequest;
+import io.model.user.SignupRequest;
+import io.model.user.UserInfoResponse;
 import io.repository.RoleRepository;
 import io.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -21,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -61,7 +66,7 @@ public class AuthController {
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
     List<String> roles = userDetails.getAuthorities().stream()
-        .map(item -> item.getAuthority())
+        .map(GrantedAuthority::getAuthority)
         .collect(Collectors.toList());
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
