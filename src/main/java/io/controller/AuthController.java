@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import io.config.security.JwtUtils;
 import io.config.security.UserDetailsImpl;
 import io.model.message.ERole;
-import io.model.message.MessageResponse;
 import io.model.message.Role;
 import io.model.message.User;
 import io.model.user.LoginRequest;
@@ -79,11 +78,11 @@ public class AuthController {
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+      return ResponseEntity.badRequest().body("Error: Username is already taken!");
     }
 
     if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+      return ResponseEntity.badRequest().body("Error: Email is already in use!");
     }
 
     // Create new user's account
@@ -124,13 +123,13 @@ public class AuthController {
     user.setRoles(roles);
     userRepository.save(user);
 
-    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    return ResponseEntity.ok("User registered successfully!");
   }
 
   @PostMapping("/signout")
   public ResponseEntity<?> logoutUser() {
     ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-        .body(new MessageResponse("You've been signed out!"));
+        .body("You've been signed out!");
   }
 }
