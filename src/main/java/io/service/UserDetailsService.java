@@ -1,8 +1,8 @@
 package io.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import io.config.security.UserDetailsImpl;
 
 public interface UserDetailsService extends org.springframework.security.core.userdetails.UserDetailsService {
-  UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+  UserDetailsImpl loadUserByUsername(String username);
+
 }
