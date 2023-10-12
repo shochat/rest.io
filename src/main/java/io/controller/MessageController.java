@@ -2,13 +2,17 @@ package io.controller;
 
 import io.config.security.JwtUtils;
 import io.config.security.UserDetailsImpl;
+import io.exception.TransactionFailedException;
 import io.model.message.Message;
 import io.model.message.MessageRateRequest;
 import io.model.message.MessageRequest;
 import io.service.MessageService;
 import io.service.UserDetailsService;
+import jakarta.transaction.TransactionalException;
 import jakarta.validation.Valid;
+import org.hibernate.TransactionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,15 +27,13 @@ public class MessageController {
     UserDetailsService userDetailsService;
 
     @PostMapping("/post")
-    public ResponseEntity<?> postMessage(@Valid @RequestBody MessageRequest messageRequest, @CookieValue(name = "mb-cookie")String mbCookie) {
-        String userNameFromJwtToken = jwtUtils.getUserNameFromJwtToken(mbCookie);
-        Long userId = userDetailsService.loadUserByUsername(userNameFromJwtToken).getId();
-        Message message = new Message();
-        message.setText(messageRequest.getText());
-        message.setVoteRate(0);
-        message.setAutherId(userId);
-        messageService.save(message);
-        return ResponseEntity.ok().body("Message successfully saved: " + messageRequest.getText());
+    public ResponseEntity<?> postMessage(@Valid @RequestBody MessageRequest messageRequest,
+                                         @CookieValue(name = "mb-cookie")String mbCookie) {
+        Message newMessage = messageService.postMessage(messageRequest, mbCookie);
+        if (newMessage != null) {
+            return ResponseEntity.ok(newMessage);
+        }
+        return new ResponseEntity<>("Failed to post message", HttpStatusCode.valueOf(500));
     }
 
     @GetMapping("/{id}")
@@ -44,9 +46,7 @@ public class MessageController {
 
     @GetMapping("/getAllForUser/{userName}")
     public ResponseEntity<?> getAllMessages(@PathVariable String userName) {
-        UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userName);
-        Long userId = userDetails.getId();
-        return messageService.getAllByAuther(userId).map(ResponseEntity::ok)
+        return messageService.getAllByAuther(userName).map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound()
                         .build());
     }

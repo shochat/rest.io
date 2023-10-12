@@ -1,7 +1,10 @@
 package io.service;
 
+import io.config.security.JwtUtils;
+import io.config.security.UserDetailsImpl;
 import io.model.message.Message;
 import io.model.message.MessageRateRequest;
+import io.model.message.MessageRequest;
 import io.repository.MessageRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +18,24 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     MessageRepository messageRepository;
+    @Autowired
+    JwtUtils jwtUtils;
+    @Autowired
+    UserDetailsService userDetailsService;
     public Optional<Message> findById(Long id) {
         return messageRepository.findById(id);
     }
 
     @Override
-    public Optional<List<Message>> getAllByAuther(Long autherId) {
-        return messageRepository.findAllByAutherId(autherId);
+    public Optional<List<Message>> getAllByAuther(String userName) {
+        UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userName);
+        Long userId = userDetails.getId();
+        return messageRepository.findAllByAutherId(userId);
     }
 
     @Override
-    public void save(Message message) {
-        messageRepository.save(message);
+public Message save(Message message) {
+        return messageRepository.save(message);
     }
 
     @Transactional
@@ -46,5 +55,16 @@ public class MessageServiceImpl implements MessageService {
             messageRepository.updateVoteRate(newRate, messageRateRequest.getMessageId().intValue());
         });
         return messageRepository.findById(messageRateRequest.getMessageId());
+    }
+
+    @Override
+    public Message postMessage(MessageRequest messageRequest, String mbCookie) {
+        String userNameFromJwtToken = jwtUtils.getUserNameFromJwtToken(mbCookie);
+        Long userId = userDetailsService.loadUserByUsername(userNameFromJwtToken).getId();
+        Message message = new Message();
+        message.setText(messageRequest.getText());
+        message.setVoteRate(0);
+        message.setAutherId(userId);
+        return this.save(message);
     }
 }
