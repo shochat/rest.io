@@ -1,6 +1,7 @@
 package io.service;
 
 import io.model.message.Message;
+import io.model.message.MessageRateRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,4 +12,7 @@ public interface MessageService {
     void save(Message message);
 
     String delete(Long messageId);
+
+    Optional<Message> updateMessageRate(MessageRateRequest messageRateRequest);
+
 }

@@ -1,6 +1,7 @@
 package io.service;
 
 import io.model.message.Message;
+import io.model.message.MessageRateRequest;
 import io.repository.MessageRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,15 @@ public class MessageServiceImpl implements MessageService {
             return String.format("%d messages deleted", deletedRecordsCount);
         }
         return String.format("Message with id %d successfully deleted", messageId);
+    }
+
+    @Transactional
+    public Optional<Message> updateMessageRate(MessageRateRequest messageRateRequest) {
+        Optional<Message> optionalMessage = messageRepository.findById(messageRateRequest.getMessageId());
+        optionalMessage.ifPresent(message -> {
+            int newRate = messageRateRequest.isRate() ? message.getVoteRate() + 1 : message.getVoteRate() - 1;
+            messageRepository.updateVoteRate(newRate, messageRateRequest.getMessageId().intValue());
+        });
+        return messageRepository.findById(messageRateRequest.getMessageId());
     }
 }

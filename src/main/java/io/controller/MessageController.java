@@ -3,6 +3,7 @@ package io.controller;
 import io.config.security.JwtUtils;
 import io.config.security.UserDetailsImpl;
 import io.model.message.Message;
+import io.model.message.MessageRateRequest;
 import io.model.message.MessageRequest;
 import io.service.MessageService;
 import io.service.UserDetailsService;
@@ -55,8 +56,10 @@ public class MessageController {
         return ResponseEntity.ok(messageService.delete(id));
     }
 
-    @PutMapping("/{rate}")
-    public String rateMessage(@PathVariable boolean rate) {
-        return "rate message";
+    @PutMapping("/rate")
+    public ResponseEntity<?> rateMessage(@RequestBody MessageRateRequest messageRateRequest) {
+        return messageService.updateMessageRate(messageRateRequest)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(500).build());
     }
 }
