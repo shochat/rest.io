@@ -2,7 +2,7 @@ package io.config.security;
 
 import java.io.IOException;
 
-import io.service.UserDetailsServiceImpl;
+import io.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
   private JwtUtils jwtUtils;
 
   @Autowired
-  private UserDetailsServiceImpl userDetailsService;
+  private UserService userService;
 
   private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
@@ -35,7 +35,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = userService.loadUserByUsername(username);
         
         UsernamePasswordAuthenticationToken authentication = 
             new UsernamePasswordAuthenticationToken(userDetails,
