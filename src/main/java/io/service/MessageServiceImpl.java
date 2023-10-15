@@ -1,6 +1,5 @@
 package io.service;
 
-import io.config.security.JwtUtils;
 import io.config.security.UserDetailsImpl;
 import io.model.message.Message;
 import io.model.message.MessageRateRequest;
@@ -15,20 +14,17 @@ import java.util.Optional;
 
 @Service
 public class MessageServiceImpl implements MessageService {
-
     @Autowired
     MessageRepository messageRepository;
     @Autowired
-    JwtUtils jwtUtils;
-    @Autowired
-    UserDetailsService userDetailsService;
+    UserService userService;
     public Optional<Message> findById(Long id) {
         return messageRepository.findById(id);
     }
 
     @Override
     public Optional<List<Message>> getAllByAuther(String userName) {
-        UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userName);
+        UserDetailsImpl userDetails = userService.loadUserByUsername(userName);
         Long userId = userDetails.getId();
         return messageRepository.findAllByAutherId(userId);
     }
@@ -59,8 +55,7 @@ public Message save(Message message) {
 
     @Override
     public Message postMessage(MessageRequest messageRequest, String mbCookie) {
-        String userNameFromJwtToken = jwtUtils.getUserNameFromJwtToken(mbCookie);
-        Long userId = userDetailsService.loadUserByUsername(userNameFromJwtToken).getId();
+        Long userId = userService.extractUserIdFromToken(mbCookie);
         Message message = new Message();
         message.setText(messageRequest.getText());
         message.setVoteRate(0);
