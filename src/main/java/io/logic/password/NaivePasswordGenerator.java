@@ -1,4 +1,4 @@
-package io.logic;
+package io.logic.password;
 
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
