@@ -8,6 +8,8 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class ServerConfig {
@@ -28,6 +30,12 @@ public class ServerConfig {
     tomcat.addAdditionalTomcatConnectors(getHttpConnector());
     return tomcat;
   }
+
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
 
   private Connector getHttpConnector() {
     var connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
